@@ -1,0 +1,171 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+:root {
+    --van-popup-close-icon-margin: 10px;
+}
+a{
+    text-decoration: none;
+}
+img{
+    max-width: 100%;
+}
+.flex{
+    display: flex;
+}
+.flex-wrap{
+    flex-wrap: wrap;
+}
+.flex-column{
+    flex-direction: column;
+}
+.flex-rr{
+    flex-direction: row-reverse;
+}
+.flex-jc-center{
+    justify-content: center;
+}
+.flex-ai-center{
+    align-items: center;
+}
+.flex-jc-sb{
+    justify-content: space-between;
+}
+.flex1{
+    flex: 1;
+}
+.fs-12{
+    font-size: 12px;
+}
+.fs-13{
+    font-size: 13px;
+}
+.fs-14{
+    font-size: 14px;
+}
+.fs-16{
+    font-size: 16px;
+}
+.fs-18{
+    font-size: 18px!important;
+}
+.fs-20{
+    font-size: 20px!important;
+}
+.fs-22{
+    font-size: 22px!important;
+}
+.fs-24{
+    font-size: 24px!important;
+}
+.fs-26{
+    font-size: 26px!important;
+}
+.fw-b{
+    font-weight: bold;
+}
+.pr{
+    position: relative;
+}
+.pd-5-0{
+    padding: 5px 0;
+}
+.pd-10-0{
+    padding: 10px 0;
+}
+.pd-5-10{
+    padding: 5px 10px;
+}
+.pd20{
+    padding: 20px;
+}
+.pd10{
+    padding: 10px;
+}
+.max-pd5, .pd5{
+    padding: 5px;
+}
+.pd-0-5{
+    padding: 0 5px;
+}
+.mg-5-0{
+    margin: 5px 0;
+}
+.mt-10{
+    margin-top: 10px;
+}
+.mt-20{
+    margin-top: 10px;
+}
+.mt-5{
+    margin-top: 5px;
+}
+.mb-5{
+    margin-bottom: 5px;
+}
+.ml-5{
+    margin-left: 5px;
+}
+.ml-10{
+    margin-left: 10px;
+}
+.col-white{
+    color: #ffffff;
+}
+.col-gray{
+    color: #777;
+}
+.col-red{
+    color: #e02e24;
+}
+.col-black{
+    color: #333333;
+}
+.bg-white{
+    background-color: #ffffff;
+}
+.bg-gray{
+    background-color: #f4f4f4;
+}
+.ali-left, .tl-left{
+    text-align: left;
+}
+.tl-center{
+    text-align: center;
+}
+.tl-right{
+    text-align: right;
+}
+.van-icon-iconbg{
+    background-image: url('../images/mobile.png');
+    height:20px;
+    width:20px;
+    background-size: 100% 100%;
+}
+.mg-20-0{
+    margin: 20px 0;
+}
+.h20{
+    height: 20px;
+}
+/*两行溢出隐藏*/
+.overhide{
+    display: -webkit-box !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-line-clamp:2;
+    -webbit-box-orient:vertical;
+}
+/*一行超出隐藏*/
+.overhideline1{
+    display: -webkit-box !important;
+  /*　text-overflow: ellipsis;*/
+  　overflow: hidden;
+    -webkit-line-clamp:1;
+    -webbit-box-orient:vertical;
+    white-space: nowrap;
+}
+.van-nav-bar .van-icon{
+    color: #333333!important;
+}
