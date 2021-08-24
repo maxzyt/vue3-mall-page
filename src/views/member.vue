@@ -41,7 +41,7 @@
     <div class="flex flex-jc-sb tool-list">
       <div class="flex flex-column flex-ai-center" @click="editAddress">
         <i class="iconfont icon-dizhi1 fs-26"></i>
-        <span>收获地址</span>
+        <span>收货地址</span>
       </div>
       <div class="flex flex-column flex-ai-center" @click="collect">
         <i class="iconfont icon-shangpinshoucang fs-26"></i>
