@@ -15,6 +15,8 @@ import { ref, onMounted, reactive } from 'vue';
 import { AddressList } from 'vant';
 import Navbar from "../components/Navbar";
 import { useRouter } from 'vue-router';
+import {address} from "../api/user";
+
 export default {
   name: "address",
   components: {
@@ -23,31 +25,33 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const chosenAddressId = ref('1');
-    const list = [
-      {
-        id: '1',
-        name: '张三',
-        tel: '13000000000',
-        address: '浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室',
-        isDefault: true,
-      },
-      {
-        id: '2',
-        name: '李四',
-        tel: '1310000000',
-        address: '浙江省杭州市拱墅区莫干山路 50 号',
-      },
-    ];
+    const chosenAddressId = ref('');
+    const chosenAddressId2 = ref('');
+    const list = ref([]);
+    onMounted(async ()=>{
+      await address({}).then((res)=>{
+        if(res.data.length){
+          for (var i=0;i<res.data.length;i++){
+            if(res.data[i].default==1){
+              chosenAddressId2.value=res.data[i].id;
+            }
+            list.value.push({id:res.data[i].id,name:res.data[i].name,tel:res.data[i].mobile,address: res.data[i].address,isDefault: res.data[i].default==1?true:false});
+          }
+        }
+      })
+      chosenAddressId.value=chosenAddressId2.value;
+    })
     const onAdd = () => {
       router.push(`/addaddress`);
     }
     const onEdit = (item, index) => {
       console.log(item);
       console.log(index);
-      router.push(`/editaddress`);
+      router.push(`/editaddress/${item.id}`);
     };
-    const onSelect = (item, index) => console.log('切换地址：'+index);
+    const onSelect = (item, index) => {
+      console.log(item)
+    }
     return {
       list,
       onAdd,

@@ -18,19 +18,19 @@
       </div>
     </div>
     <div class="flex flex-jc-sb order-list">
-      <div class="flex flex-column flex-ai-center">
+      <div class="flex flex-column flex-ai-center" @click="goOrder(1)">
         <i class="iconfont icon-daifukuan fs-26"></i>
         <span>待付款</span>
       </div>
-      <div class="flex flex-column flex-ai-center">
+      <div class="flex flex-column flex-ai-center" @click="goOrder(2)">
         <i class="iconfont icon-shizhong fs-26"></i>
         <span>待发货</span>
       </div>
-      <div class="flex flex-column flex-ai-center">
+      <div class="flex flex-column flex-ai-center" @click="goOrder(3)">
         <i class="iconfont icon-daifahuo1 fs-26"></i>
         <span>待收货</span>
       </div>
-      <div class="flex flex-column flex-ai-center">
+      <div class="flex flex-column flex-ai-center" @click="goOrder(4)">
         <i class="iconfont icon-pingjia fs-26"></i>
         <span>评价</span>
       </div>
@@ -65,7 +65,14 @@
       </div>
       <div class="col-red ml-10 flex flex-jc-center flex-ai-center">精选推荐</div>
     </div>
+    <van-list
+        v-model:loading="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+    >
     <GoodCpt :data="goodItems"></GoodCpt>
+    </van-list>
   </div>
   <FooterBar></FooterBar>
 </div>
@@ -74,57 +81,31 @@
 <script>
 import { onMounted, reactive, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
+import {List} from 'vant';
 import background from "../components/background";
 import GoodCpt from "../components/GoodListCpt"
 import FooterBar from "../components/FooterBar";
+import {recommend} from "../api";
+import {history} from "../api/user";
+
 export default {
   name: "member",
   components: {
     FooterBar,
     background,
-    GoodCpt
+    GoodCpt,
+    [List.name]: List,
   },
   setup() {
     const router = useRouter()
+    const domain=process.env.VUE_APP_a;
     const state = reactive({
       goodItems: [
-        {
-          id: 1,
-          img: require('../assets/images/goodlist1.png'),
-          title: '夏季2021学院风',
-          desc: '极速退款',
-          price: 18.96,
-          pinAmount: '3万',
-          headPic: require('../assets/images/headpic.png')
-        },
-        {
-          id: 2,
-          img: require('../assets/images/goodlist2.png'),
-          title: '雪纺套装裙女夏季2021新款时尚气质宽松显瘦两件套碎花半身裙子潮',
-          desc: '买贵包赔',
-          price: 45,
-          pinAmount: '4.7万',
-          headPic: require('../assets/images/headpic.png')
-        },
-        {
-          id: 3,
-          img: require('../assets/images/goodlist3.png'),
-          title: '2021新款夏季甜美日系修身显瘦短衫褶皱设计可爱搭肩+挂脖小吊带',
-          desc: '24小时发货',
-          price: 39,
-          pinAmount: '3.6万',
-          headPic: require('../assets/images/headpic.png')
-        },
-        {
-          id: 4,
-          img: require('../assets/images/goodlist4.png'),
-          title: '单/夏季新款韩版小清新宽松背带连衣裙女+短袖碎花上衣两件套装潮',
-          desc: '退货包运费',
-          price: 69,
-          pinAmount: '4.9万',
-          headPic: require('../assets/images/headpic.png')
-        }
-      ]
+      ],
+      loading: false,
+      finished: false,
+      page:1,
+      limit:4
     });
     const goOrder = (type) => {
       router.push(`/order/${type}`)
@@ -141,14 +122,27 @@ export default {
     const set = () => {
       router.push(`/set`);
     }
-    console.log(window.history);
+    const onLoad = () => {
+      recommend({page:state.page,limit:state.limit}).then((res)=>{
+        // 加载状态结束
+        state.loading = false;
+        if(res.code==1){
+          state.goodItems=state.goodItems.concat(res.data);
+          state.page++;
+        }else{
+          state.finished=true;
+        }
+      })
+    };
     return {
       ...toRefs(state),
       goOrder,
       editAddress,
       collect,
       history,
-      set
+      set,
+      onLoad,
+      domain
     }
   }
 }

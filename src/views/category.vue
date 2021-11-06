@@ -9,143 +9,17 @@
   <div class="content flex">
     <div class="left-box">
       <div style="overflow:auto;">
-      <div class="active tl-center">女装</div>
-      <div class="tl-center">食品</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
-      <div class="tl-center">男装</div>
+      <div class="tl-center" @click="categoryByIdFun(item.id)" v-for="(item,index) in ldata" :key="item.id" :class="lid==item.id?'active':''">{{item.name}}</div>
       </div>
     </div>
     <div class="right-box flex1">
       <div style="overflow: auto">
-      <div class="content-detail">
-        <p>套装</p>
+      <div class="content-detail" v-for="(item,index) in rdata" :key="item.id">
+        <p>{{item.name}}</p>
         <div class="flex flex-jc-sb">
-          <div class="flex flex-column" @click="goList(1)">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column" @click="goList(1)">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column" @click="goList(1)">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-        </div>
-      </div>
-      <div class="content-detail">
-        <p>套装</p>
-        <div class="flex flex-jc-sb">
-          <div class="flex flex-column" @click="goList(1)">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column" @click="goList(1)">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column" @click="goList(1)">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-        </div>
-      </div>
-      <div class="content-detail">
-        <p>套装</p>
-        <div class="flex flex-jc-sb">
-          <div class="flex flex-column" @click="goList(1)">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column" @click="goList(1)">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column" @click="goList(1)">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-        </div>
-      </div>
-      <div class="content-detail">
-        <p>套装</p>
-        <div class="flex flex-jc-sb">
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-        </div>
-      </div>
-      <div class="content-detail">
-        <p>套装</p>
-        <div class="flex flex-jc-sb">
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-        </div>
-      </div>
-      <div class="content-detail">
-        <p>套装</p>
-        <div class="flex flex-jc-sb">
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-        </div>
-      </div>
-      <div class="content-detail">
-        <p>套装</p>
-        <div class="flex flex-jc-sb">
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
-          </div>
-          <div class="flex flex-column">
-            <img src="../assets/images/category1.png"/>
-            <div class="goods-name">套装裙</div>
+          <div class="flex flex-column" @click="goList(item2.id)" v-for="(item2,index2) in item.data2" :key="item2.id">
+            <img :src="domain+item2.image"/>
+            <div class="goods-name">{{item2.name}}</div>
           </div>
         </div>
       </div>
@@ -159,6 +33,9 @@
 <script>
 import { useRouter } from "vue-router"
 import FooterBar from "../components/FooterBar";
+import {category,categoryById} from "../api/gooddetail";
+import {reactive,toRefs,onMounted} from "vue";
+
 export default {
   name: "category",
   components: {
@@ -166,11 +43,38 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const domain=process.env.VUE_APP_a;
+    const state = reactive({
+      ldata:[],
+      rdata:[],
+      lid:0
+    })
+    onMounted(()=>{
+      category().then((res)=>{
+        console.log(res)
+        if(res.code==1){
+          state.ldata=res.data.data;
+          state.rdata=res.data.data1;
+          state.lid=res.data.data[0].id;
+        }
+      })
+    })
+    const categoryByIdFun=(id)=>{
+      categoryById({id:id}).then((res)=>{
+        if(res.code==1){
+          state.lid=id;
+          state.rdata=res.data;
+        }
+      })
+    }
     const goList = (id) => {
       router.push(`/goodlist/${id}`)
     }
     return {
-      goList
+      ...toRefs(state),
+      goList,
+      domain,
+      categoryByIdFun
     }
   }
 }

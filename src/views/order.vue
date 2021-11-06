@@ -21,26 +21,26 @@
     </ul>
   </div>
   <div class="orderlist-box">
-    <div v-for="(item, index) in orderItem" :key="item.id" @click="goDetail(item.id)" class="pd10 order-box bg-white">
-      <div class="flex flex-jc-sb">
+    <div v-for="(item, index) in orderItem" :key="item.id" class="pd10 order-box bg-white">
+      <div class="flex flex-jc-sb" @click="goDetail(item.id)" v-for="(item2,index2) in item.ordergood" :key="item2.id">
         <div class="img-box">
-          <img :src="item.img"/>
+          <img :src="domain+item2.good_image"/>
         </div>
         <div class="basic-info ml-10 flex1">
-          <div class="good-name">{{ item.goodName }}</div>
-          <div class="attr-name col-gray fs-13 overhideline1">{{ item.goodAttr }}</div>
-          <div class="policy col-white mt-5"><span>{{ item.policy }}</span></div>
+          <div class="good-name">{{ item2.good_name }}</div>
+          <div class="attr-name col-gray fs-13 overhideline1">{{ item2.specs }}</div>
+          <div class="policy col-white mt-5"><span>{{ item2.policy }}</span></div>
         </div>
         <div class="price">
-          <div>￥{{ item.goodNum }}</div>
-          <div class="tl-right">×{{ item.goodPrice }}</div>
+          <div>￥{{ item2.amount }}</div>
+          <div class="tl-right">×{{ item2.price }}</div>
         </div>
       </div>
       <div class="ordermoney flex flex-rr">
-        <div>应付：￥{{ item.payMoney }}(免运费)</div>
+        <div>应付：￥{{ item.money }}(免运费)</div>
       </div>
       <div class="btn-box flex flex-rr">
-        <div>再次拼单</div>
+<!--        <div>再次拼单</div>-->
         <div>删除订单</div>
       </div>
     </div>
@@ -53,6 +53,8 @@ import { onMounted, reactive, toRefs } from 'vue';
 import { useRoute , useRouter } from 'vue-router'
 import background from "../components/background";
 import Navbar from "../components/Navbar";
+import {orderList} from "../api/order";
+
 export default {
   name: "order",
   components: {
@@ -60,7 +62,9 @@ export default {
     Navbar
   },
   setup() {
+    const domain=process.env.VUE_APP_a
     const router = useRouter()
+    const route = useRoute()
     const state = reactive({
       navIndex: 0,
       items: [
@@ -74,37 +78,34 @@ export default {
           label: '待发货'
         },
         {
-          label: '待收获'
+          label: '待收货'
         },
         {
           label: '评价'
         }
       ],
       orderItem: [
-        {
-          id: 1,
-          img: require('../assets/images/order1.png'),
-          goodName: '[超低价]陕西红富士苹果当季冰糖心丑苹果新鲜水果5/10斤整箱批发',
-          goodAttr: '精选红富士,带箱10斤【精选特大果】更脆更甜',
-          policy: '坏了包赔',
-          goodPrice: 99,
-          goodNum: 1,
-          payMoney: 99
-        },
-        {
-          id: 2,
-          img: require('../assets/images/order1.png'),
-          goodName: '[超低价]陕西红富士苹果当季冰糖心丑苹果新鲜水果5/10斤整箱批发',
-          goodAttr: '精选红富士,带箱10斤【精选特大果】更脆更甜',
-          policy: '坏了包赔',
-          goodPrice: 99,
-          goodNum: 1,
-          payMoney: 99
-        }
       ]
+    })
+    onMounted(()=>{
+      const {type} = route.params;
+      state.navIndex=type;
+      orderList({status:state.navIndex}).then((res)=>{
+        if(res.code==1){
+          state.orderItem=res.data;
+        }
+      })
     })
     const goList = (index) => {
       console.log(index)
+      state.navIndex=state.status=index;
+      orderList({status:state.status}).then((res)=>{
+        if(res.code==1){
+          state.orderItem=res.data;
+        }else{
+          state.orderItem=[];
+        }
+      })
     }
     const goDetail = (id) =>
     {
@@ -113,7 +114,8 @@ export default {
     return {
       ...toRefs(state),
       goList,
-      goDetail
+      goDetail,
+      domain
     }
   }
 }

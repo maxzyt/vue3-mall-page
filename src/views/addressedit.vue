@@ -12,9 +12,12 @@
 
 <script>
 import { ref, onMounted, reactive, toRefs } from 'vue';
+import {useRoute} from 'vue-router';
 import Navbar from "../components/Navbar";
-import { AddressEdit } from 'vant';
+import {AddressEdit, Toast} from 'vant';
 import { areaList } from '@vant/area-data';
+import {oneAddress,editAddress} from "../api/user";
+
 export default {
   name: "addressedit",
   components: {
@@ -22,23 +25,38 @@ export default {
     [AddressEdit.name]: AddressEdit
   },
   setup() {
+    const route=useRoute();
     const state = reactive({
-      addressInfo: {}
+      addressInfo: {},
+      id:0
     });
     onMounted(() => {
-      state.addressInfo.name = '张三';
-      state.addressInfo.tel = '15290938565';
-      state.addressInfo.province = '北京市';
-      state.addressInfo.city = '北京市';
-      state.addressInfo.country = '东城区';
-      state.addressInfo.addressDetail = '清华大学';
-      state.addressInfo.areaCode = '110101';
-      state.addressInfo.postalCode = '123456';
-      state.addressInfo.isDefault = true;
+      const {id} = route.params;
+      state.id=id;
+      oneAddress({id:id}).then((res)=>{
+        if(res.code==1){
+          state.addressInfo.name = res.data.name;
+          state.addressInfo.tel = res.data.mobile;
+          state.addressInfo.province = res.data.province;
+          state.addressInfo.city = res.data.city;
+          state.addressInfo.country = res.data.area;
+          state.addressInfo.addressDetail = res.data.address;
+          state.addressInfo.areaCode = res.data.areacode;
+          state.addressInfo.postalCode = res.data.postal_code;
+          state.addressInfo.isDefault = res.data.default==1?true:false;
+        }
+      })
+
     })
     const onSave = (content) => {
       console.log(content);
-
+      content.id=state.id;console.log(content);
+      editAddress(content).then((res)=>{
+        if(res.code==1){
+          Toast('修改成功');
+          window.history.back();
+        }
+      });
     }
 
     return {

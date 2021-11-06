@@ -3,7 +3,7 @@
 <div class="gooddetail-box">
   <van-swipe lazy-render>
     <van-swipe-item v-for="image in images" :key="image">
-      <img :src="image" />
+      <img :src="domain+image" />
     </van-swipe-item>
     <template #indicator="{ active }">
       <div class="custom-indicator">{{ active + 1 }}/{{ flashCount }}</div>
@@ -13,16 +13,16 @@
     <div class="flex flex-jc-sb price">
       <div class="left">
         <span class="col-red fs-12">¥</span>
-        <span class="col-red fs-20 fw-b">18.79</span>
+        <span class="col-red fs-20 fw-b">{{row.price}}</span>
         <span class="col-red fs-12">起</span>
-        <del class="col-black">¥52.38</del>
+        <del class="col-black">¥{{row.market_price}}</del>
       </div>
       <div class="right col-black">
-        已拼2.9万件
+        已售{{row.sale}}件
       </div>
     </div>
     <div class="name fs-16">
-      <span>夏季2021新款学院风修身显瘦甜美减龄格子翻领短袖衬衫女时尚套装</span>
+      <span>{{ row.name }}</span>
       <span class="btn col-white">极速退款</span>
     </div>
     <div class="flex flex-jc-sb col-gray">
@@ -38,13 +38,7 @@
   <background height="10px"/>
   <div class="content pd10">
     <p>商品详情</p>
-    <div class="article-box">
-      <div>
-        <img src="../assets/images/gooddetail1.png"/>
-      </div>
-      <div>
-        <img src="../assets/images/gooddetail2.jpeg"/>
-      </div>
+    <div class="article-box" v-html="row.content">
     </div>
   </div>
   <div class="footer flex flex-jc-sb">
@@ -55,7 +49,7 @@
         </div>
         <div>更多</div>
       </div>
-      <div>
+      <div @click="addCollectFnc" :class="isCollect?'col-red':''">
         <div>
           <i class="iconfont icon-icon_collect fs-18"></i>
         </div>
@@ -70,11 +64,11 @@
     </div>
     <div class="right flex col-white">
       <div class="flex flex-column flex-jc-center flex1 selfbuy" @click="showPopup">
-        <div class="tl-center">¥108</div>
+        <div class="tl-center">¥{{row.market_price}}</div>
         <div class="tl-center">单独购买</div>
       </div>
       <div class="flex flex-column flex-jc-center flex1 teambuy" @click="showPopup">
-        <div class="tl-center">¥78.8</div>
+        <div class="tl-center">¥{{row.price}}</div>
         <div class="tl-center">发起拼单</div>
       </div>
     </div>
@@ -88,16 +82,16 @@
   >
   <div class="popup pd10">
     <div class="good-info flex-jc-center">
-      <img src="../assets/images/gooddetail3.png">
+      <img :src="domain+row.image">
       <div class="flex1">
         <div class="col-red fs-18">¥20.58</div>
         <div>已选：{{ selected }}</div>
       </div>
     </div>
     <div class="attr-box" v-for="(item, key) in attrs" :key="item.id">
-      <div class="tl-left fs-16">{{ item.attr }}</div>
+      <div class="tl-left fs-16">{{ item.name }}</div>
       <div class="flex flex-wrap mt-10">
-        <div class="attr-text" @click="switchAttr(item2.attrid, item.id, item2.attrtext)" :class="classObject(item2.attrid, item.id)" v-for="(item2, key2) in item.data" :key="item2.attrid">{{ item2.attrtext }}</div>
+        <div class="attr-text" @click="switchAttr(item2.id, item.id, item2.name)" :class="classObject(item2.id, item.id)" v-for="(item2, key2) in item.specsvalue" :key="item2.id">{{ item2.name }}</div>
       </div>
     </div>
 <!--    <div class="attr-box">-->
@@ -130,6 +124,7 @@ import { Swipe, SwipeItem, Popup, Button, Toast } from 'vant'
 import background from "../components/background";
 import Background from "../components/background";
 import Navbar from "../components/Navbar";
+import { goodDetail,addCollect } from '../api/gooddetail';
 export default {
   name: "gooddetail",
   components: {
@@ -142,72 +137,40 @@ export default {
     Toast
   },
   setup() {
+    const domain=process.env.VUE_APP_a;
     const route = useRoute()
     const router = useRouter()
-    const images = [
-      'https://img.yzcdn.cn/vant/apple-1.jpg',
-      'https://img.yzcdn.cn/vant/apple-2.jpg',
-    ];
     const state = reactive({
       id: 0,
+      isCollect:false,
+      row:{},
       images: [
-        'https://img.yzcdn.cn/vant/apple-1.jpg',
-        'https://img.yzcdn.cn/vant/apple-2.jpg',
       ],
       attrs: [
-        {
-          'attr': '颜色',
-          'id': 1,
-          'data': [
-            {
-              'attrid': 11,
-              'attrtext': '套装'
-            },
-            {
-              'attrid': 12,
-              'attrtext': '单件上衣'
-            }
-          ]
-        },
-        {
-          'attr': '尺寸',
-          'id': 2,
-          'data': [
-            {
-              'attrid': 21,
-              'attrtext': 'S'
-            },
-            {
-              'attrid': 22,
-              'attrtext': 'M'
-            },
-            {
-              'attrid': 23,
-              'attrtext': 'L'
-            }
-          ]
-        }
       ],
       attrResult: [
-        {
-          'id': 1,
-          'result': 0,
-          'text': ''
-        },
-        {
-          'id': 2,
-          'result': 0,
-          'text': ''
-        }
       ],
       selected: '',
       flashCount: 2,
       amount: 1,
       show: false
     })
-    onMounted(() => {
+    onMounted(async () => {
       const { id } = route.params
+      console.log(id);
       state.id = id
+      await goodDetail({id: id}).then((res) => {
+        state.images=res.data.gallery;
+        state.row=res.data.row;
+        state.attrs=res.data.specs;
+        state.flashCount = res.data.gallery.length;
+        state.isCollect=res.data.isCollect;
+        for (var i=0;i<res.data.specs.length;i++){
+          console.log(res.data.specs[i].id);
+          state.attrResult[i] = {'id': res.data.specs[i].id, 'result':0,'text':''};
+        }
+        console.log(state.attrResult);
+      })
     })
     const showPopup = () => {
       state.show = true
@@ -251,11 +214,21 @@ export default {
         Toast('请选择规格')
         return
       }
+      const attrids=[];
+      state.attrResult.forEach(function (val,index){
+        attrids[index]=val.result;
+      })
+      const attrid=attrids.join(',');
       const id = state.id
-      const ids = '1,2'
-      const attrids = '11,21'
-      router.push(`/confirmorder/${id}/${ids}/${attrids}`);
-      // router.push({name: 'confirmorder', params: {id: state.id, ids: '1,2', attrids: '11,21'}})
+      router.push(`/confirmorder/${id}/${attrid}/${state.amount}`);
+    }
+    const addCollectFnc=()=>{
+      addCollect({id:state.id}).then((res)=>{
+        Toast(res.msg);
+        if(res.code==1){
+          state.isCollect=true;
+        }
+      })
     }
     return {
       ...toRefs(state),
@@ -264,7 +237,9 @@ export default {
       dec,
       switchAttr,
       classObject,
-      confirmOrder
+      confirmOrder,
+      domain,
+      addCollectFnc
     }
   }
 }

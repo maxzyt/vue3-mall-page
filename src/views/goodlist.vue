@@ -26,7 +26,30 @@
   </div>
   </div>
   <!--商品列表开始-->
-  <GoodCpt :data="goodItems"/>
+  <van-list
+      v-model:loading="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="onLoad"
+  >
+    <div class="list-box">
+      <div class="good-box" v-for="(item, index) in goodItems" :key="item.id" @click="goDetail(item.id)">
+        <div>
+          <img :src="domain+item.image"/>
+        </div>
+        <div class="info-box pd10">
+          <p>{{item.name}}</p>
+          <p class="col-gray fs-12 pd-10-0">{{ item.policy }}</p>
+          <p>
+            <span class="col-red">¥</span>
+            <span class="col-red fs-16">{{ item.price }}</span>
+            <span class="fs-12 col-gray">已拼{{ item.sale }}件</span>
+<!--            <img :src="item.headPic"/>-->
+          </p>
+        </div>
+      </div>
+    </div>
+  </van-list>
   <!--商品列表结束-->
 </div>
 </template>
@@ -35,68 +58,70 @@
 import {reactive, toRefs, onMounted} from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import GoodCpt from "../components/GoodListCpt";
-import { NavBar } from 'vant';
+import { NavBar,List } from 'vant';
+import {goodList} from '../api/gooddetail';
 export default {
   name: "goodlist",
   components: {
     GoodCpt,
-    [NavBar.name]: NavBar
+    [NavBar.name]: NavBar,
+    [List.name]: List
   },
   setup() {
     const router = useRouter()
     const route = useRoute()
+    const domain=process.env.VUE_APP_a
     const state = reactive({
       headName: '商品列表',
+      id:0,
+      page:1,
+      limit:6,
       orderby: 0,//0综合1销量2价格
       pricesort: 1, //0升序1降序
+      loading: false,
+      finished: false,
       goodItems: [
-        {
-          id: 1,
-          img: require('../assets/images/goodlist1.png'),
-          title: '夏季2021学院风',
-          desc: '极速退款',
-          price: 18.96,
-          pinAmount: '3万',
-          headPic: require('../assets/images/headpic.png'),
-        },
-        {
-          id: 2,
-          img: require('../assets/images/goodlist2.png'),
-          title: '雪纺套装裙女夏季2021新款时尚气质宽松显瘦两件套碎花半身裙子潮',
-          desc: '买贵包赔',
-          price: 45,
-          pinAmount: '4.7万',
-          headPic: require('../assets/images/headpic.png')
-        },
-        {
-          id: 3,
-          img: require('../assets/images/goodlist3.png'),
-          title: '2021新款夏季甜美日系修身显瘦短衫褶皱设计可爱搭肩+挂脖小吊带',
-          desc: '24小时发货',
-          price: 39,
-          pinAmount: '3.6万',
-          headPic: require('../assets/images/headpic.png')
-        },
-        {
-          id: 4,
-          img: require('../assets/images/goodlist4.png'),
-          title: '单/夏季新款韩版小清新宽松背带连衣裙女+短袖碎花上衣两件套装潮',
-          desc: '退货包运费',
-          price: 69,
-          pinAmount: '4.9万',
-          headPic: require('../assets/images/headpic.png')
-        }
       ],
     })
     onMounted(() => {
-      const { id } = route.params;
-      console.log(id);
+      const { id } = route.params;console.log('id:'+id);
+      state.id=id;
     })
+    const onLoad = () => {
+      setTimeout(() => {
+        console.log('cid:'+state.id);
+        goodList({cid:state.id,page:state.page,limit:state.limit,priceSort:state.pricesort,orderby:state.orderby}).then((res)=>{
+          if(res.code==1){
+            state.goodItems=state.goodItems.concat(res.data);
+          }
+          // 加载状态结束
+          state.loading = false;
+          if(res.data.length==0){
+            state.finished=true;
+          }else{
+            state.page=state.page+1;
+          }
+        })
+      }, 0);
+    };
     const switchOrderby = (param) => {
       state.orderby = param
       if(param == 2) {
         state.pricesort = 1-state.pricesort
       }
+      state.page=1;
+      goodList({cid:state.id,page:state.page,limit:state.limit,priceSort:state.pricesort,orderby:state.orderby}).then((res)=>{
+        if(res.code==1){
+          state.goodItems=res.data;
+        }
+        // 加载状态结束
+        state.loading = false;
+        if(res.data.length==0){
+          state.finished=true;
+        }else{
+          state.page=state.page+1;
+        }
+      })
     }
     const goDetail = (id) => {
       router.push(`/gooddetail/${id}`);
@@ -108,7 +133,9 @@ export default {
       goDetail,
       switchOrderby,
       onClickLeft,
-      ...toRefs(state)
+      ...toRefs(state),
+      onLoad,
+      domain
     }
   }
 }
@@ -155,5 +182,31 @@ export default {
 .pr div i:first-child{
   position: absolute;
   top: -3px;
+}
+.list-box{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+.good-box{
+  width: 49.5%;
+}
+.info-box p:first-child{
+  height: 20px;
+  overflow: hidden;
+  word-break: break-all;
+}
+.info-box p{
+  text-align: left;
+}
+.info-box img{
+  float: right;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.banner-box img{
+  width: 100%;
 }
 </style>

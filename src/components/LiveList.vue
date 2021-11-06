@@ -1,12 +1,12 @@
 <template>
   <div class="live flex flex-jc-sb">
-    <div class="content pr mt-10" v-for="(item, index) in data" :key="item.id">
+    <div class="content pr mt-10" v-for="(item, index) in data" :key="item.id" @click="goUrl">
       <div class="img-box">
-        <img :src="item.img"/>
+        <img :src="domain+item.image"/>
       </div>
       <div class="views flex">
         <img src="../assets/images/0c0d8168-b69c-4a18-adfe-342caf303225.gif"/>
-        <div class="col-white fs-12">{{item.views}}观看</div>
+        <div class="col-white fs-12">{{item.watch}}观看</div>
       </div>
       <div class="title">{{item.title}}</div>
     </div>
@@ -14,10 +14,21 @@
 </template>
 
 <script>
+import {Toast} from 'vant';
 export default {
   name: "LiveList",
   props: {
     data: Array
+  },
+  setup(){
+    const domain=process.env.VUE_APP_a;
+    const goUrl=()=>{
+      Toast("开发中..(●'◡'●)");
+    }
+    return {
+      domain,
+      goUrl
+    }
   }
 }
 </script>

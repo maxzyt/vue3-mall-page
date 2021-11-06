@@ -14,6 +14,8 @@ import { ref, onMounted } from 'vue';
 import Navbar from "../components/Navbar";
 import { AddressEdit } from 'vant';
 import { areaList } from '@vant/area-data';
+import {addAddress} from "../api/user";
+
 export default {
   name: "addaddress",
   components: {
@@ -23,7 +25,12 @@ export default {
   setup() {
     const onSave = (content) => {
       console.log(content);
-
+      addAddress(content).then((res)=>{
+        console.log(res);
+        if(res.code==1){
+          window.history.back();
+        }
+      })
     }
 
     return {

@@ -11,12 +11,12 @@
 >
 <van-swipe-cell v-for="(item, index) in list" :key="item.id">
   <van-card
-      :price="item.price"
-      :desc="item.desc"
-      :title="item.title"
+      :price="item.good.price"
+      :desc="item.good.policy"
+      :title="item.good.name"
       class="goods-card"
-      :thumb="item.thumb"
-      @click="goDetail(item.id)"
+      :thumb="domain+item.good.image"
+      @click="goDetail(item.good_id)"
   />
   <template #right>
     <van-button square text="删除" type="danger" class="delete-button" @click="del(item.id)"/>
@@ -31,6 +31,8 @@ import { reactive, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
 import { SwipeCell, Card, Button, List } from 'vant';
 import Navbar from "../components/Navbar";
+import {collect} from "../api/user";
+
 export default {
   name: "collect",
   components: {
@@ -42,10 +44,13 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const domain=process.env.VUE_APP_a;
     const state = reactive({
       list: [
 
       ],
+      page:1,
+      limit:10,
       loading: false,
       finished: false,
     });
@@ -54,20 +59,16 @@ export default {
     }
     console.log(window.history);
     const onLoad = () => {
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 6; i++) {
-          state.list.push({id: i+1, price: 10*(i+1), desc: '描述信息'+(1+i), title: '商品标题'+(1+i), thumb: 'https://img.yzcdn.cn/vant/cat.jpeg'});
-        }
-
+      collect({page:state.page,limit:state.limit}).then((res)=>{
         // 加载状态结束
         state.loading = false;
-
-        // 数据全部加载完成
-        if (state.list.length >= 40) {
-          state.finished = true;
+        if(res.data.length){
+          state.list=state.list.concat(res.data);
+          state.page++;
+        }else{
+          state.finished=true;
         }
-      }, 2000);
+      })
     };
     const goDetail = (id) => {
       router.push(`/gooddetail/${id}`);
@@ -76,7 +77,8 @@ export default {
       ...toRefs(state),
       del,
       onLoad,
-      goDetail
+      goDetail,
+      domain
     }
   }
 }

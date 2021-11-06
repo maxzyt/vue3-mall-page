@@ -31,7 +31,7 @@
           placeholder="密码"
       />
       <div class="pd20">
-        <van-button color="#e02e24" size="large">登录</van-button>
+        <van-button color="#e02e24" size="large" @click="doLogin">登录</van-button>
         <background height="10px"/>
         <van-button plain color="#e02e24" size="large" @click="loginSwitch">返回</van-button>
       </div>
@@ -49,6 +49,7 @@ import { useRouter } from "vue-router"
 import { Button, Field, CellGroup } from "vant"
 import background from "../components/background";
 import Picc from "../components/Picc";
+import {login} from '../api/user';
 export default {
   name: "Login",
   components: {
@@ -70,10 +71,20 @@ export default {
     const reg = () => {
       router.push('/reg')
     }
+    const doLogin=async ()=>{
+      await login({account:state.account,password:state.pwd}).then((res)=>{
+        console.log(res);
+        if(res.code==1){
+          localStorage.setItem('token', res.data.userinfo.token);
+          window.location.href = '/';
+        }
+      })
+    }
     return {
       state,
       loginSwitch,
-      reg
+      reg,
+      doLogin
     }
   }
 }

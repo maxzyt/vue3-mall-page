@@ -9,20 +9,22 @@
         finished-text="没有更多了"
         @load="onLoad"
     >
-      <van-swipe-cell v-for="(item, index) in list" :key="item.id">
-        <h4 class="date-title">2021-08-13</h4>
-        <van-card
-            :price="item.price"
-            :desc="item.desc"
-            :title="item.title"
-            class="goods-card"
-            :thumb="item.thumb"
-            @click="goDetail(item.id)"
-        />
-        <template #right>
-          <van-button square text="删除" type="danger" class="delete-button" @click="del(item.id)"/>
-        </template>
-      </van-swipe-cell>
+      <div v-for="(item, index) in list" :key="item.id">
+        <h4 class="date-title">{{ item.createtime_text }}</h4>
+        <van-swipe-cell v-for="(item2, index2) in item.goodData" :key="item2.id">
+          <van-card
+              :price="item2.price"
+              :desc="item2.policy"
+              :title="item2.name"
+              class="goods-card"
+              :thumb="domain+item2.image"
+              @click="goDetail(item2.id)"
+          />
+          <template #right>
+            <van-button square text="删除" type="danger" class="delete-button" @click="del(item.id,item2.id)"/>
+          </template>
+        </van-swipe-cell>
+      </div>
     </van-list>
   </div>
 </template>
@@ -30,8 +32,10 @@
 <script>
 import { reactive, toRefs } from 'vue';
 import { useRouter } from 'vue-router';
-import { SwipeCell, Card, Button, List } from 'vant';
+import {SwipeCell, Card, Button, List, Toast} from 'vant';
 import Navbar from "../components/Navbar";
+import {history,delHistory} from "../api/user";
+
 export default {
   name: "history",
   components: {
@@ -43,40 +47,47 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const domain=process.env.VUE_APP_a;
     const state = reactive({
       list: [
 
       ],
       loading: false,
       finished: false,
+      page:1,
+      limit:10
     });
-    const del = (id) => {
-      console.log(id);
+    const del = (id,id2) => {
+      delHistory({id:id,goodId:id2}).then((res)=>{
+        Toast(res.msg);
+        if(res.code==1){
+          for(var i=0;i<state.list.length;i++){
+            if(state.list[i].id==id){
+              for(var j=0;j<state.list[i].goodData.length;j++){
+                if(state.list[i].goodData[j].id==id2){
+                  state.list[i].goodData.splice(j,1);
+                }
+              }
+              if(state.list[i].goodData.length==0){
+                state.list.splice(i,1);
+              }
+            }
+          }
+        }
+      })
     }
     console.log(window.history);
     const onLoad = () => {
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 6; i++) {
-          state.list.push(
-              {
-                id: i+1,
-                price: 10*(i+1),
-                desc: '描述信息'+(1+i),
-                title: '商品标题'+(1+i),
-                thumb: 'https://img.yzcdn.cn/vant/cat.jpeg'
-              }
-          );
-        }
-
+      history({page:state.page,limit:state.limit}).then((res)=>{
         // 加载状态结束
         state.loading = false;
-
-        // 数据全部加载完成
-        if (state.list.length >= 40) {
-          state.finished = true;
+        if(res.data.length>0){
+          state.list=state.list.concat(res.data);
+          state.page++;
+        }else{
+          state.finished=true;
         }
-      }, 2000);
+      })
     };
     const goDetail = (id) => {
       router.push(`/gooddetail/${id}`);
@@ -85,7 +96,8 @@ export default {
       ...toRefs(state),
       del,
       onLoad,
-      goDetail
+      goDetail,
+      domain
     }
   }
 }

@@ -31,7 +31,7 @@
     </div>
     <div class="border-box"></div>
     <div class="pd20">
-      <van-button round color="#17A1FF" size="large">注册</van-button>
+      <van-button round color="#17A1FF" size="large" @click="doReg">注册</van-button>
     </div>
     <div class="login-box">
       <p><router-link to="/login">账号登录</router-link></p>
@@ -44,6 +44,7 @@
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { Field, Button} from 'vant'
+import {reg} from '../api/user'
 export default {
   name: "reg",
   components: {
@@ -51,12 +52,19 @@ export default {
     [Button.name]: Button
   },
   setup() {
+    const router=useRouter()
     const state = reactive({
       account: '',
       pwd: ''
     })
+    const doReg=()=>{
+      reg({mobile:state.account,password:state.pwd}).then((res)=>{
+        router.push('/login');
+      })
+    }
     return {
-      state
+      state,
+      doReg
     }
   }
 }

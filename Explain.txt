@@ -1,0 +1,40 @@
+flex-direction属性决定主轴的方向（即项目的排列方向）
+flex-direction: row | row-reverse | column | column-reverse;
+vue使用rem：https://www.jianshu.com/p/94902796f2ad?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation，配置完后需重启服务
+flex-wrap属性
+flex-wrap: nowrap | wrap | wrap-reverse;
+vue3.x:
+https://gitee.com/newbee-ltd/newbee-mall-vue3-app/blob/main/src/views/Home.vue
+vue3.x setup：
+https://v3.cn.vuejs.org/guide/composition-api-template-refs.html#%E4%BE%A6%E5%90%AC%E6%A8%A1%E6%9D%BF%E5%BC%95%E7%94%A8
+const {a} = {a:1}
+console.log(a)// 1
+vant vue3.x文档：
+https://vant-contrib.gitee.io/vant/v3/#/zh-CN
+phpstorm快速选中当前行：
+Home光标到行首，点击SHIFT+END即可
+$ mkdir runoob-git-test                     # 创建测试目录
+$ cd runoob-git-test/                       # 进入测试目录
+$ echo "# 菜鸟教程 Git 测试" >> README.md     # 创建 README.md 文件并写入内容
+$ ls                                        # 查看目录下的文件
+README
+$ git init                                  # 初始化
+$ git add README.md                         # 添加文件
+$ git commit -m "添加 README.md 文件"        # 提交并备注信息
+[master (root-commit) 0205aab] 添加 README.md 文件
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+
+# 提交到 Github
+$ git remote add origin git@github.com:tianqixin/runoob-git-test.git
+$ git push -u origin master
+
+#模拟鼠标右键
+shift+F10
+ctrl+tab 当前浏览器打开多个窗口之间正切换
+ctrl+shift+tab 当前浏览器打开多个窗口之间反切换
+ctrl+W 关闭当前正在查看的窗口(也可以关闭当前正在打开的资源管理器/我的电脑打开的文件夹)
+ctrl+T 打开新窗口
+CTRL+F4   关闭当前的编辑器或选项卡
+F6快速定位到浏览器地址栏
+ctrl+K快读定位到地址栏输入关键词进行搜索

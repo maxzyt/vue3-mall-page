@@ -46,8 +46,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "gooddetail" */ '../views/gooddetail.vue')
   },
   {
-    path: '/confirmorder/:id/:ids/:attrids',
-    name: 'Confrimorder',
+    path: '/confirmorder/:id/:ids/:amount',
+    name: 'Confirmorder',
     component: () => import(/* webpackChunkName: "gooddetail" */ '../views/confirmorder.vue')
   },
   {
@@ -66,7 +66,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "orderdetail" */ '../views/orderdetail.vue')
   },
   {
-    path: '/editaddress',
+    path: '/editaddress/:id',
     name: 'editaddress',
     component: () => import(/* webpackChunkName: "editaddress" */ '../views/addressedit.vue')
   },

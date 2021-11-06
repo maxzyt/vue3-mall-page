@@ -1,7 +1,10 @@
-import axios from "axios"
-import { Toast } from 'vant'
+import axios from "axios";
+import {Toast} from 'vant';
+import router from '../router/index';
+console.log(router);
 axios.defaults.timeout = 5000
 axios.defaults.baseURL = '/api'
+axios.defaults.headers['token'] = localStorage.getItem('token') || ''
 axios.interceptors.request.use((config) => {
     console.log(config);
     // if(config.method == 'post') {
@@ -14,18 +17,29 @@ axios.interceptors.request.use((config) => {
     //在发送请求前，比如添加用户id，token等公共的参数//根据实际情况配置
     return config
 }, (error) => {
+    console.log(error);
+    Toast.fail(error)
     return Promise.reject(error)
 })
 axios.interceptors.response.use((res) => {
-    //console.log(res.data)
-    if(res.data.code == 1) {
-    }else {
-        //Toast(res.data.msg)
+    // console.log(res.data)
+    if (res.data.code == 1) {
+        return res.data
+    } else if (res.data.code == 4011) {
+        router.push('/login');
+    } else if(res.data.code==0) {
+        console.log(res.data.code)
+        Toast(res.data.msg);
+        //return Promise.reject(res)
+    }else{
+        Toast(res.data.msg);
         return Promise.reject(res)
-        //return Promise.resolve(res)
-        //alert(res.data.msg);
     }
     return res.data
+}, (error) => {
+    console.log(error);
+    Toast(error)
+    return Promise.reject(error);
 })
 // export function axiosPost(url, params) {
 //     axios.post(url, params)

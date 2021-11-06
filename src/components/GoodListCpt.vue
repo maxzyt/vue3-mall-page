@@ -2,16 +2,16 @@
   <div class="list-box">
     <div class="good-box" v-for="(item, index) in data" :key="item.id" @click="goDetail(item.id)">
       <div>
-        <img :src="item.img"/>
+        <img :src="domain+item.image"/>
       </div>
       <div class="info-box pd10">
-        <p>{{item.title}}</p>
-        <p class="col-gray fs-12 pd-10-0">{{ item.desc }}</p>
+        <p>{{item.name}}</p>
+        <p class="col-gray fs-12 pd-10-0">{{ item.policy }}</p>
         <p>
           <span class="col-red">¥</span>
           <span class="col-red fs-16">{{ item.price }}</span>
-          <span class="fs-12 col-gray">已拼{{ item.pinAmount }}件</span>
-          <img :src="item.headPic"/>
+          <span class="fs-12 col-gray">已售{{ item.sale }}件</span>
+          <img src="../assets/images/8.png"/>
         </p>
       </div>
     </div>
@@ -21,19 +21,26 @@
 <script>
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import {List} from 'vant';
 export default {
   name: "GoodCpt",
+  components:{
+    [List.name]:List
+  },
   props: {
+    id:0,
     data: Array
   },
   setup() {
     console.log(123456)
+    const domain=process.env.VUE_APP_a;
     const router = useRouter()
     const goDetail = (id) => {
       router.push(`/gooddetail/${id}`);
     }
     return {
-      goDetail
+      goDetail,
+      domain
     }
   }
 }
