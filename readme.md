@@ -1,7 +1,9 @@
 # vue3-mall
-基于脚手架vue-cli3.0的商城静态页面，使用vue3的语法进行编写。
+基于脚手架vue-cli3.0的商城页面，使用vue3的语法进行编写。
 特此声明：本源码仅供学习交流使用，不得用于违法用途，如果侵犯了国家法律，责任自负。
 
+# 接口项目
+[vue3-mall-api](https://github.com/maxzyt/vue3-mall-api)
 # 商城页面展示
 
 首页
@@ -56,7 +58,10 @@
 
 ![](page_images/设置.png)
 
-## Project setup
+## 修改配置文件
+
+.env文件里的VUE_APP_a改为你在本地搭建的api后台域名
+vue.config.js里的target改为你在本地搭建的api后台域名
 ```
 npm install
 ```
@@ -70,11 +75,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
