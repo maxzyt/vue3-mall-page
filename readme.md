@@ -60,8 +60,8 @@
 
 ## 修改配置文件
 
-.env文件里的VUE_APP_a改为你在本地搭建的api后台域名
-vue.config.js里的target改为你在本地搭建的api后台域名
+### .env文件里的VUE_APP_a改为你在本地搭建的api后台域名
+### vue.config.js里的target改为你在本地搭建的api后台域名
 ```
 npm install
 ```
