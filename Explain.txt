@@ -3,8 +3,6 @@ flex-direction: row | row-reverse | column | column-reverse;
 vue使用rem：https://www.jianshu.com/p/94902796f2ad?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation，配置完后需重启服务
 flex-wrap属性
 flex-wrap: nowrap | wrap | wrap-reverse;
-vue3.x:
-https://gitee.com/newbee-ltd/newbee-mall-vue3-app/blob/main/src/views/Home.vue
 vue3.x setup：
 https://v3.cn.vuejs.org/guide/composition-api-template-refs.html#%E4%BE%A6%E5%90%AC%E6%A8%A1%E6%9D%BF%E5%BC%95%E7%94%A8
 const {a} = {a:1}
