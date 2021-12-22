@@ -21,18 +21,14 @@
 <script>
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import {List} from 'vant';
 export default {
   name: "GoodCpt",
   components:{
-    [List.name]:List
   },
   props: {
-    id:0,
     data: Array
   },
   setup() {
-    console.log(123456)
     const domain=process.env.VUE_APP_a;
     const router = useRouter()
     const goDetail = (id) => {
@@ -59,7 +55,7 @@ export default {
 .info-box p:first-child{
   height: 20px;
   overflow: hidden;
-  word-break: break-all;
+  white-space: nowrap;
 }
 .info-box p{
   text-align: left;

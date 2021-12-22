@@ -37,14 +37,9 @@ export default {
     const onClickLeft = () => {
       console.log(props);
       if(props.url != '') {
-        console.log('in');
-        //router.replace({ path: props.url });
-        //router.go(-1);
-        window.history.back();
+        router.replace({ path: props.url });
       }else {
-        console.log(-1);
-        //router.go(-1);
-        window.history.back();
+        router.go(-1);
       }
       context.emit('dosomething');
     }

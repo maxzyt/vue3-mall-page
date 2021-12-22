@@ -33,6 +33,7 @@ export default {
   bottom: 0;
   width: 100%;
   background: #ffffff;
+  padding: 5px 0;
 }
 
 #nav a {

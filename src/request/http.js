@@ -1,7 +1,6 @@
 import axios from "axios";
 import {Toast} from 'vant';
 import router from '../router/index';
-console.log(router);
 axios.defaults.timeout = 5000
 axios.defaults.baseURL = '/api'
 axios.defaults.headers['token'] = localStorage.getItem('token') || ''
@@ -26,7 +25,7 @@ axios.interceptors.response.use((res) => {
     if (res.data.code == 1) {
         return res.data
     } else if (res.data.code == 4011) {
-        router.push('/login');
+        router.replace('/login');
     } else if(res.data.code==0) {
         console.log(res.data.code)
         Toast(res.data.msg);

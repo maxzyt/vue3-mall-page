@@ -195,7 +195,8 @@ export default {
 .info-box p:first-child{
   height: 20px;
   overflow: hidden;
-  word-break: break-all;
+  white-space: nowrap;
+  /*word-break: break-all;*/
 }
 .info-box p{
   text-align: left;

@@ -33,7 +33,7 @@
       <div class="pd20">
         <van-button color="#e02e24" size="large" @click="doLogin">登录</van-button>
         <background height="10px"/>
-        <van-button plain color="#e02e24" size="large" @click="loginSwitch">返回</van-button>
+        <van-button plain color="#e02e24" size="large" @click="goHome">返回</van-button>
       </div>
       <div class="footer col-gray">
         <p class="fs-12">登录即表示同意 <a>服务协议与隐私政策</a><a class="reg" @click="reg">免费注册</a></p>
@@ -65,6 +65,9 @@ export default {
       account: '',
       pwd: ''
     })
+    const goHome = () =>{
+      window.location.href='/';
+    }
     const loginSwitch = () => {
       state.showLogin = !state.showLogin
     }
@@ -84,7 +87,8 @@ export default {
       state,
       loginSwitch,
       reg,
-      doLogin
+      doLogin,
+      goHome
     }
   }
 }
